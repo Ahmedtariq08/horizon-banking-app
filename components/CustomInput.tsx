@@ -1,33 +1,23 @@
-import React from "react";
 import {
-    Form,
     FormControl,
-    FormDescription,
     FormField,
-    FormItem,
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
-import { FieldPath, UseFormReturn } from "react-hook-form";
-import { ZodObject, z } from "zod";
 import { authFormSchema } from "@/lib/schema";
-import { Control } from "react-hook-form";
+import React from "react";
+import { Control, FieldPath } from "react-hook-form";
+import { z } from "zod";
 
-interface CustomInputProps<TSchema extends ZodObject<any>> {
-    control: Control<z.infer<TSchema>>;
-    name: FieldPath<z.infer<TSchema>>;
+const formSchema = authFormSchema("sign-up");
+interface CustomInputProps {
+    control: Control<z.infer<typeof formSchema>>;
+    name: FieldPath<z.infer<typeof formSchema>>;
     label: string;
     placeholder: string;
     type?: React.HTMLInputTypeAttribute;
 }
-// interface CustomInputProps {
-//     control: Control<z.infer<typeof authFormSchema>>;
-//     name: FieldPath<z.infer<typeof authFormSchema>>;
-//     label: string;
-//     placeholder: string;
-//     type?: React.HTMLInputTypeAttribute;
-// }
 
 const CustomInput = ({
     control,
@@ -46,6 +36,8 @@ const CustomInput = ({
                     <div className="flex w-full flex-col">
                         <FormControl>
                             <Input
+                                autoComplete="new-password"
+                                spellCheck={false}
                                 placeholder={placeholder}
                                 className="input-class"
                                 type={type}
