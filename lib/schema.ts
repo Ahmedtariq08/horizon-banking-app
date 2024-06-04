@@ -31,11 +31,7 @@ export const authFormSchema = (type: "sign-in" | "sign-up") => {
             : z.string().length(2, {
                   message: "State must be exactly 2 characters long",
               }),
-        postalCode: isSignIn
-            ? optionalString
-            : z.number().refine((val) => val >= 100 && val <= 999999, {
-                  message: "Postal Code must be between 3 and 6 digits",
-              }),
+        postalCode: isSignIn ? optionalString : z.string().max(6).min(3),
         dateOfBirth: isSignIn
             ? optionalString
             : z.string().refine(
@@ -47,7 +43,7 @@ export const authFormSchema = (type: "sign-in" | "sign-up") => {
               ),
         ssn: isSignIn
             ? optionalString
-            : z.number().refine((val) => val.toString().length >= 3, {
+            : z.string().refine((val) => val.toString().length >= 3, {
                   message: "SSN must be at least 3 digits long",
               }),
         // Both

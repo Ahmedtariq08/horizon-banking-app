@@ -1,19 +1,22 @@
 "use client";
 import { Button } from "@/components/ui/button";
 import { Form } from "@/components/ui/form";
+import { signIn, signUp } from "@/lib/actions/user.actions";
 import { authFormSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
+import { Loader2 } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
 import CustomInput from "./CustomInput";
-import { Loader2 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useToast } from "./ui/use-toast";
 
 const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
     const router = useRouter();
+    const { toast } = useToast();
     const [user, setUser] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
@@ -33,18 +36,33 @@ const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
         try {
             setIsLoading(true);
             if (!isSignIn) {
-                // const newUser = await signUp(data);
-                // setUser(newUser);
+                const response = await signUp(data);
+                if (response.isSuccess) {
+                    const user = response.data;
+                    setUser(user as any);
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: "Sign up failed",
+                        description: response.error.message,
+                    });
+                }
             }
             if (isSignIn) {
-                // const response = await signIn({email: data.email, password: data.password});
-                // if (response) {
-                //     router.push("/");
-                // }
+                const response = await signIn({
+                    email: data.email,
+                    password: data.password,
+                });
+                if (response.isSuccess) {
+                    router.push("/");
+                } else {
+                    toast({
+                        variant: "destructive",
+                        title: "Sign in failed",
+                        description: response.error.message,
+                    });
+                }
             }
-            // Sign up with appwrite
-            // Create plaid token
-            console.log(data);
         } catch (error) {
             console.log(error);
         } finally {
@@ -184,19 +202,21 @@ const AuthForm = ({ type }: { type: "sign-in" | "sign-up" }) => {
                     </form>
                 </Form>
             )}
-            <footer className="flex justify-center gap-1">
-                <p className="text-14 font-normal text-gay-600">
-                    {isSignIn
-                        ? `Don't have an account? `
-                        : "Already have an account?"}
-                </p>
-                <Link
-                    className="form-link"
-                    href={isSignIn ? "/sign-up" : "/sign-in"}
-                >
-                    {isSignIn ? "Sign Up" : "Sign In"}
-                </Link>
-            </footer>
+            {!user && (
+                <footer className="flex justify-center gap-1">
+                    <p className="text-14 font-normal text-gay-600">
+                        {isSignIn
+                            ? `Don't have an account? `
+                            : "Already have an account?"}
+                    </p>
+                    <Link
+                        className="form-link"
+                        href={isSignIn ? "/sign-up" : "/sign-in"}
+                    >
+                        {isSignIn ? "Sign Up" : "Sign In"}
+                    </Link>
+                </footer>
+            )}
         </section>
     );
 };
