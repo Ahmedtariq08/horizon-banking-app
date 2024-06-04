@@ -2,7 +2,7 @@
 
 export const signIn = async () => {
     try {
-        // Mutation / Database / MkaeFetch
+        // Mutation / Database / Make Fetch
     } catch (error) {
         console.error("Error", error);
     }

@@ -1,5 +1,5 @@
-import MobileNav from "@/components/MobileNav";
-import Sidebar from "@/components/Sidebar";
+import MobileNav from "@/components/home/MobileNav";
+import { Sidebar } from "lucide-react";
 import Image from "next/image";
 
 export default function RootLayout({
@@ -10,7 +10,8 @@ export default function RootLayout({
     const loggedIn = { firstName: "Ahmed", lastName: "Tariq" };
     return (
         <main className="flex h-screen w-full font-inter">
-            <Sidebar user={loggedIn} />
+            {/* <Sidebar user={loggedIn} /> */}
+            <Sidebar />
             <div className="flex size-full flex-col">
                 <div className="root-layout">
                     <Image
