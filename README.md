@@ -1,4 +1,3 @@
 ### HORIZON BANKING APP
 
-## NextJs 13
-## AppWrite
+#### NextJs, Typescript, Tailwind, Shadcn, Appwrite, Plaid
